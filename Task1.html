@@ -1,0 +1,36 @@
+<html>
+<head>
+	<h1>Stock DATA</h1>
+</head>
+<body>
+
+	<p>Search: <input id=inpSymbol></p>
+	<p><button onclick=getAlphaVantagedata(); >get Alpha Vantage Data</button></p>
+
+	<div id = "divContents" >Data will appear here. This may take a number of seconds. Open the developer console to see more details.</div>
+
+<script>
+	
+	function getAlphaVantagedata() {
+		const symbol = inpSymbol.value;	
+		const url = 'https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol='+symbol+'&interval=1min&apikey=32AHK2HAFOVDZ6CM';
+		requestFile( url );
+	}
+	function requestFile( url ) {
+		const xhr = new XMLHttpRequest();
+		xhr.open( 'GET', url, true );
+		xhr.onerror = function( xhr ) { console.log( 'error:', xhr  ); };
+		xhr.onprogress = function( xhr ) { console.log( 'bytes loaded:', xhr.loaded  ); }; /// or something
+		xhr.onload = callback;
+		xhr.send( null );
+		function callback( xhr ) {
+			let response, json, lines;
+			response = xhr.target.response;
+			divContents.innerText = response;
+			json = JSON.parse( response );
+console.log( 'json', json );
+		}
+	}
+</script>
+</body>
+</html>
